@@ -15,6 +15,7 @@ public class Conversor {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public Moeda converterMoeda(int opcao, double valor) throws IOException, InterruptedException {
+      try {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(API))
@@ -35,10 +36,9 @@ public class Conversor {
             case 5 -> { origem = "USD"; destino = "COP"; }
             case 6 -> { origem = "COP"; destino = "USD"; }
             default -> {
-                System.out.println("Opcão inválida");
+                throw new ConversaoException("Opção inválida! Escolha um número entre 1 e 6");
             }
         }
-
         double taxaOrigem = taxas.get(origem).getAsDouble();
         double taxaDestino = taxas.get(destino).getAsDouble();
 
@@ -46,5 +46,9 @@ public class Conversor {
         double valorConvertido = valorEmUSD * taxaDestino;
 
         return new Moeda(origem, destino, valor, valorConvertido);
+      }catch (ConversaoException | IOException | InterruptedException e){
+          System.out.println(e.getMessage());
+          return new Moeda("Erro", "Erro",0.0,00);
+      }
     }
 }
