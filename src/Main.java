@@ -1,5 +1,6 @@
 import ExChanceRate.Conversor;
 import ExChanceRate.Menu;
+import ExChanceRate.Registro;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -12,6 +13,7 @@ public class Main {
         Menu menu = new Menu();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Scanner scanner = new Scanner(System.in);
+        Registro registro = new Registro();
 
         boolean sair = false;
         while (!sair){
@@ -32,7 +34,10 @@ public class Main {
         double valor = scanner.nextDouble();
 
         System.out.println(conversor.converterMoeda(opcao,valor));
+
+        registro.salvarConversao(conversor.converterMoeda(opcao,valor));
         }
+        registro.mostrarHistorico();
         scanner.close();
 
     }

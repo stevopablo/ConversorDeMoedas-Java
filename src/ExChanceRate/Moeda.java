@@ -1,16 +1,24 @@
 package ExChanceRate;
 
+import java.time.LocalDateTime;
+
 public class Moeda {
     private String origem;
     private String destino;
     private double valor;
     private double valorConvertido;
+    private LocalDateTime hora;
 
     public Moeda(String origem, String destino, double valor, double valorConvertido) {
         this.origem = origem;
         this.destino = destino;
         this.valor = valor;
         this.valorConvertido = valorConvertido;
+        this.hora = LocalDateTime.now();
+    }
+
+    public LocalDateTime getHora() {
+        return hora;
     }
 
     public String getOrigem() {
