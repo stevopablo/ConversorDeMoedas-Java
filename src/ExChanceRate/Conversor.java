@@ -35,7 +35,7 @@ public class Conversor {
             case 5 -> { origem = "USD"; destino = "COP"; }
             case 6 -> { origem = "COP"; destino = "USD"; }
             default -> {
-                System.out.println("Opcão invalida");
+                System.out.println("Opcão inválida");
             }
         }
 

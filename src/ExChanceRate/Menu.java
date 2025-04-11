@@ -12,7 +12,7 @@ public class Menu {
                            5) Dólar ==> Peso Colombiano
                            6) Peso Colombiano =>> Dólar
                            """);
-        System.out.println("Escolha uma opcao valida");
+        System.out.println("Escolha uma opcão válida");
         System.out.println("===========================================");
     }
 }
