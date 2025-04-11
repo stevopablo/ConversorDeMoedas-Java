@@ -14,7 +14,7 @@ public class Conversor {
     private final String API = "https://v6.exchangerate-api.com/v6/5f1d82b04f491ec8ec1faa45/latest/USD";
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    public Moeda pegarCotacao(int opcao, Double valor) throws IOException, InterruptedException {
+    public Moeda converterMoeda(int opcao, double valor) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(API))
@@ -24,13 +24,27 @@ public class Conversor {
         JsonObject json = gson.fromJson(response.body(), JsonObject.class);
         JsonObject taxas = json.getAsJsonObject("conversion_rates");
 
-        return switch (opcao) {
-            case 1 -> new Moeda("Real Brasileiro (BRL)", valor * taxas.get("BRL").getAsDouble());
-            case 2 -> new Moeda("Dólar Americano (USD)", valor * taxas.get("USD").getAsDouble());
-            case 3 -> new Moeda("Peso Argentino (ARS)", valor * taxas.get("ARS").getAsDouble());
-            case 4 -> new Moeda("Peso Colombiano (COP)", valor * taxas.get("COP").getAsDouble());
-            case 5 -> new Moeda("Euro (EUR)", valor * taxas.get("EUR").getAsDouble());
-            default -> new Moeda("Moeda inválida", 0.0);
-        };
+        String origem = "";
+        String destino = "";
+
+        switch (opcao) {
+            case 1 -> { origem = "USD"; destino = "ARS"; }
+            case 2 -> { origem = "ARS"; destino = "USD"; }
+            case 3 -> { origem = "USD"; destino = "BRL"; }
+            case 4 -> { origem = "BRL"; destino = "USD"; }
+            case 5 -> { origem = "USD"; destino = "COP"; }
+            case 6 -> { origem = "COP"; destino = "USD"; }
+            default -> {
+                System.out.println("Opcão invalida");
+            }
+        }
+
+        double taxaOrigem = taxas.get(origem).getAsDouble();
+        double taxaDestino = taxas.get(destino).getAsDouble();
+
+        double valorEmUSD = valor / taxaOrigem;
+        double valorConvertido = valorEmUSD * taxaDestino;
+
+        return new Moeda(origem, destino, valor, valorConvertido);
     }
 }
